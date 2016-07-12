@@ -34,21 +34,46 @@ class DataPrep(object):
 
     def validateInputData(self):
         self.getDataFrame()
-        if inputdata=="word":
-            a=6
+        stdColNames=['geography' 'date' 'revenue' 'gc' 'margin' 'holiday' 'year' 'week_of_year' 'day_of_year' 'quarter' 'month' 'week_of_month' 'day_of_month' 'day_of_week' 'weekend']
+        #check if dataframe -> df exists
+        df_exists = 'self.df' in locals() or 'self.df' in globals()
+        try:
+            self.df
+        except NameError:
+            df_exists=False
+        else:
+            df_exists=True
+            
+        if df_exists==True:
+            df_names= self.df.columns.values
+        else:
+            print("There was an error loading the Data frame")
+        print self.df.columns.values  
+        
+        #test the non promo column names
+        if stdColNames==df_names:    #need to fix this as it errors out
+            stColNamesPass=True
+        else:
+            stColNamesPass=False
+        print(stdColNames)
         #this is the boolean to say the validation passed
-        objInitDataVal == True:
+        objInitDataVal = True
             
     
+#TEST THE CLASS
+testClass=DataPrep('C:\Users\Adam\Downloads\mldata_2012_to_2016.csv',None,'CSV')    
+
+'''
+    #ALL Functions below here will probably be part of another package/class
     def formatTS(self,inpu_df):
         a=6
         #insert code to format raw input data into the time series format requires for Dave's TS model
-        #should return some sort of dataframe object
+        #should return some sort of data frame object
 
     def formatML(self,input_df):
         a=6
         #insert code to format raw input data into the Machine Learning format required for non-TS modeling
-        #should return some sort of dataframe object
+        #should return some sort of data frame object
 
     def seasonalDecomposition(self,df_timeSeries):
         ts_dataframe=self.formatTS(df_timeSeries)
@@ -58,3 +83,4 @@ class DataPrep(object):
     def SeasDecompFcst(self,seas,trend,baseline,fcstStart, fcstEnd, PromoInfoDataFrame):
         #build a forecast by piecing together the components of the seasonalDecomposition() method
         #PromoInfoDataFrame would be the promotion information that would be used to assign some type of lift
+    '''
