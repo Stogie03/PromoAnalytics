@@ -17,7 +17,7 @@ class DataPrep(object):
         self.dataLocation= dataLocation
         self.dataConn=dataConn
         self.dataConnType=dataConnType
-        self.df=None
+        self.validateInputData()
 
     def getDataFrame(self):
         if self.dataConnType=='CSV':
@@ -32,6 +32,14 @@ class DataPrep(object):
             a=6
             #insert Hadoop/Pysprk Connection code here
 
+    def validateInputData(self):
+        self.getDataFrame()
+        if inputdata=="word":
+            a=6
+        #this is the boolean to say the validation passed
+        objInitDataVal == True:
+            
+    
     def formatTS(self,inpu_df):
         a=6
         #insert code to format raw input data into the time series format requires for Dave's TS model
