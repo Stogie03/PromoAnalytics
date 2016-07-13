@@ -3,15 +3,20 @@ Created on Jul 12, 2016
 
 @author: Adam
 '''
-import numpy
+import numpy as np
 import pandas as pd
+from scipy.special import comb
 
 
 class DataPrep(object):
     '''
     classdocs
     '''
-
+    global stdColNames
+    global limit
+    stdColNames=np.array(['geography', 'date', 'revenue', 'gc', 'margin', 'holiday', 'year', 'week_of_year', 'day_of_year', 'quarter', 'month', 'week_of_month', 'day_of_month', 'day_of_week', 'weekend'])
+    limit=10
+    
     def __init__(self,dataLocation, dataConn, dataConnType):
 
         self.dataLocation= dataLocation
@@ -33,8 +38,9 @@ class DataPrep(object):
             #insert Hadoop/Pysprk Connection code here
 
     def validateInputData(self):
+        
         self.getDataFrame()
-        stdColNames=['geography' 'date' 'revenue' 'gc' 'margin' 'holiday' 'year' 'week_of_year' 'day_of_year' 'quarter' 'month' 'week_of_month' 'day_of_month' 'day_of_week' 'weekend']
+        
         #check if dataframe -> df exists
         df_exists = 'self.df' in locals() or 'self.df' in globals()
         try:
@@ -48,20 +54,44 @@ class DataPrep(object):
             df_names= self.df.columns.values
         else:
             print("There was an error loading the Data frame")
-        print self.df.columns.values  
-        
+            
         #test the non promo column names
-        if stdColNames==df_names:    #need to fix this as it errors out
+        
+        if (np.array_equal(stdColNames,df_names[0:15])):    #need to fix this as it errors out
             stColNamesPass=True
         else:
             stColNamesPass=False
-        print(stdColNames)
+        
+        #test the number of promo columns
+        
+        df_pnames=df_names[15:df_names.size]  #get the promo columns from the dataframe
+        possibleValues=np.zeros((limit,limit))
+        
+        for x in range(1,6):
+           # possibleValues[x-1,1] = int(comb(z,1,exact=False))
+            for z in range(1,6):
+                if z<=2 and x < 2:
+                   possibleValues[x,z] = int(comb(z,1,exact=False)) 
+                #if z >= x and z > 1:
+                if z > 2 and z > x:
+                    possibleValues[x,z] = int(possibleValues[x-1,z] + comb(z,x,exact=False))
+                    #possibleValues[x,z] = int(comb(z,x,exact=False))
+        if 166 in possibleValues[:, :]:
+            print ("VALUE FOUND")
+        else:
+            print ("VALUE NOT FOUND :(")
+                
+        #print df_pnames
+        #print df_names
+        print possibleValues
+        print ('Do the standard variables pass? %s' % (stColNamesPass))
+        
         #this is the boolean to say the validation passed
         objInitDataVal = True
             
     
 #TEST THE CLASS
-testClass=DataPrep('C:\Users\Adam\Downloads\mldata_2012_to_2016.csv',None,'CSV')    
+testClass=DataPrep('C:\Users\\astokes\Desktop\Analytic Solutions\mldata_2012_to_2016.csv',None,'CSV')    
 
 '''
     #ALL Functions below here will probably be part of another package/class
