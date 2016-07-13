@@ -6,6 +6,7 @@ Created on Jul 12, 2016
 import numpy as np
 import pandas as pd
 from scipy.special import comb
+from numpy import nonzero, where
 
 
 class DataPrep(object):
@@ -31,10 +32,10 @@ class DataPrep(object):
             except NameError:
                 print "Error in reading in the CSV"
         if self.dataConnType=='DB':
-            a=6
+            a=6   #THIS NEEDS TO BE FILLED IN LATER
         
         if self.dataConnType=='Hadoop':
-            a=6
+            a=6 #THIS NEEDS TO BE FILLED IN LATER
             #insert Hadoop/Pysprk Connection code here
 
     def validateInputData(self):
@@ -67,25 +68,25 @@ class DataPrep(object):
         df_pnames=df_names[15:df_names.size]  #get the promo columns from the dataframe
         possibleValues=np.zeros((limit,limit))
         
-        for x in range(1,6):
-         
-            for z in range(1,6):
+        for x in range(1,limit):
+        
+            for z in range(1,limit):
                 if z<2 and x < 2:
                    possibleValues[x,z] = int(comb(z,1,exact=False)) 
-                #if z >= x and z > 1:
                 if z >= 2 and z >= x:
                     possibleValues[x,z] = int(possibleValues[x-1,z] + comb(z,x,exact=False))
                    
         if df_pnames.size in possibleValues[:, :]:
             print ("VALUE FOUND")
             print df_pnames.size
+            print possibleValues.index(df_pnames.size)
         else:
             print ("VALUE NOT FOUND :(")
             print df_pnames.size
                 
         #print df_pnames
         #print df_names
-        print possibleValues
+        #print possibleValues
         print ('Do the standard variables pass? %s' % (stColNamesPass))
         
         #this is the boolean to say the validation passed
