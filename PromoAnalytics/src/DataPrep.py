@@ -68,18 +68,20 @@ class DataPrep(object):
         possibleValues=np.zeros((limit,limit))
         
         for x in range(1,6):
-           # possibleValues[x-1,1] = int(comb(z,1,exact=False))
+         
             for z in range(1,6):
-                if z<=2 and x < 2:
+                if z<2 and x < 2:
                    possibleValues[x,z] = int(comb(z,1,exact=False)) 
                 #if z >= x and z > 1:
-                if z > 2 and z > x:
+                if z >= 2 and z >= x:
                     possibleValues[x,z] = int(possibleValues[x-1,z] + comb(z,x,exact=False))
-                    #possibleValues[x,z] = int(comb(z,x,exact=False))
-        if 166 in possibleValues[:, :]:
+                   
+        if df_pnames.size in possibleValues[:, :]:
             print ("VALUE FOUND")
+            print df_pnames.size
         else:
             print ("VALUE NOT FOUND :(")
+            print df_pnames.size
                 
         #print df_pnames
         #print df_names
