@@ -80,20 +80,56 @@ class DataPrep(object):
             if df_pnames.size in possibleValues[:, :]:
                 print ("VALUE FOUND")
                 print df_pnames.size
-                print possibleValues.index(df_pnames.size)
+                possiblePromoFormat=self.returnIndex2DArray(possibleValues, df_pnames.size)
+                print possiblePromoFormat
             else:
-                print ("VALUE NOT FOUND :(")
+                print ("VALUE NOT FOUND. Promos not set up correctly in input file")
                 print df_pnames.size
                     
             #print df_pnames
             #print df_names
             #print possibleValues
+            self.findSoloPromos(df_pnames, possiblePromoFormat)
             print ('Do the standard variables pass? %s' % (stColNamesPass))
         
         #this is the boolean to say the validation passed
         objInitDataVal = True
-            
-    
+        
+    def returnIndex2DArray(self,ArrayName,searchVal):
+        arrayIndices=[[0,0]]
+        for idx, val in enumerate(ArrayName):
+          
+            if searchVal in val[:]:
+                for idx2, val2 in enumerate(val):
+                    if val2==searchVal:
+                        arrayIndices.insert(0,[idx,idx2])
+        return arrayIndices
+                
+    def findSoloPromos(self,columnNames, arrayIndex):  
+        
+        for element in arrayIndex:
+            if element !=[0,0]:
+                singlePromoList=[]
+                numPromo=element[1]
+                pCombinations=element[0]
+                print ("number of promos:%d and the possible combinations:%d" % (numPromo,pCombinations))
+                for i in range(1,numPromo+1):
+                    singlePromoList.append('p'+str(i))
+                singlePromoPass=False
+                falseMatch=False
+                #Test to see if the single P columns in the file match what is expected
+                try:
+                    singlePromoPass=(singlePromoList[0:(numPromo)]==columnNames[0:(numPromo)].tolist())
+                except NameError:
+                    print ("Fail in single promo comparison")
+                if singlePromoPass==True:
+                    print ('Promo+1= %d' % (numPromo+1))
+                    if columnNames[numPromo]==['p' + str(numPromo+1)]:
+                        falseMatch=True
+                    print ('FalseMatch= %s columnName= %s' % (falseMatch, columnNames[numPromo]))    
+                print ('The file values: %s' % (columnNames[0:(numPromo)].tolist()))
+                print ('singlePromoPass: %s' % (singlePromoPass))
+                    
 #TEST THE CLASS here
 testClass=DataPrep('C:\Users\\astokes\Desktop\Analytic Solutions\mldata_2012_to_2016.csv',None,'CSV')    
 
