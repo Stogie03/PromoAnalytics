@@ -5,6 +5,7 @@ Created on Jul 12, 2016
 '''
 
 #test
+import itertools
 import numpy as np
 import pandas as pd
 from scipy.special import comb
@@ -95,7 +96,7 @@ class DataPrep(object):
             print possibleValues
             self.findSoloPromos(df_pnames, possiblePromoFormat)
             print ('Do the standard variables pass? %s' % (stColNamesPass))
-        
+            self.findMultiPromos(df_pnames, possiblePromoFormat)
         #this is the boolean to say the validation passed
         objInitDataVal = True
         
@@ -133,7 +134,34 @@ class DataPrep(object):
                     print ('FalseMatch= %s columnName= %s' % (falseMatch, columnNames[numPromo]))    
                 print ('The file values: %s' % (columnNames[0:(numPromo)].tolist()))
                 print ('singlePromoPass: %s' % (singlePromoPass))
+                
+                
+    def findMultiPromos(self,columnNames, arrayIndex):     
+        for element in arrayIndex:
+            templist=list()
+            elementLength=len(element)
+            print ('elementLength= %d' % (elementLength))
+            if element !=[0,0]:
+                singlePromoList=[]
+                numPromo=element[1]
+                pCombinations=element[0]
+                numPromoList=range(numPromo+1)
+                print ('numPromo: %s numpromolist: %s' % (numPromo,numPromoList))
+            '''for i in range(1,numPromo+1):
+                for z in range(1,numPromo+1):
+                    pass
+            '''
+            for i in numPromoList:
+                if i > 0:
+                    templist.append(i)
+            print type(templist)
+            print templist
+            print list(itertools.combinations(templist, 2))
+
+            #for element1 in itertools.product(*templist):
+            #    print ('Element1: %s' %(element1))
                     
+                   
 #TEST THE CLASS here
 testClass=DataPrep('C:\Users\\astokes\Desktop\Analytic Solutions\mldata_2012_to_2016.csv',None,'CSV')    
 
