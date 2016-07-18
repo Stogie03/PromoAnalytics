@@ -3,6 +3,7 @@ Created on Jul 12, 2016
 
 @author: Adam
 '''
+#test 1
 import numpy as np
 import pandas as pd
 from scipy.special import comb
@@ -14,9 +15,11 @@ class DataPrep(object):
     classdocs
     '''
     global stdColNames
+    global stdColCount
     global limit
     stdColNames=np.array(['geography', 'date', 'revenue', 'gc', 'margin', 'holiday', 'year', 'week_of_year', 'day_of_year', 'quarter', 'month', 'week_of_month', 'day_of_month', 'day_of_week', 'weekend'])
     limit=10
+    stdColCount=14
     
     def __init__(self,dataLocation, dataConn, dataConnType):
 
@@ -32,10 +35,10 @@ class DataPrep(object):
             except NameError:
                 print "Error in reading in the CSV"
         if self.dataConnType=='DB':
-            a=6   #THIS NEEDS TO BE FILLED IN LATER
+            pass   #THIS NEEDS TO BE FILLED IN LATER
         
         if self.dataConnType=='Hadoop':
-            a=6 #THIS NEEDS TO BE FILLED IN LATER
+            pass #THIS NEEDS TO BE FILLED IN LATER
             #insert Hadoop/Pysprk Connection code here
 
     def validateInputData(self):
@@ -59,14 +62,14 @@ class DataPrep(object):
         #test the non promo column names
         if df_exists==True:
             
-            if (np.array_equal(stdColNames,df_names[0:15])):    #need to fix this as it errors out
+            if (np.array_equal(stdColNames,df_names[0:stdColCount +1])):    
                 stColNamesPass=True
             else:
                 stColNamesPass=False
             
             #test the number of promo columns
             
-            df_pnames=df_names[15:df_names.size]  #get the promo columns from the dataframe
+            df_pnames=df_names[stdColCount +1:df_names.size]  #get the promo columns from the dataframe
             possibleValues=np.zeros((limit,limit))
             
             for x in range(1,limit):
@@ -88,7 +91,7 @@ class DataPrep(object):
                     
             #print df_pnames
             #print df_names
-            #print possibleValues
+            print possibleValues
             self.findSoloPromos(df_pnames, possiblePromoFormat)
             print ('Do the standard variables pass? %s' % (stColNamesPass))
         
