@@ -128,42 +128,63 @@ class DataPrep(object):
                 except NameError:
                     print ("Fail in single promo comparison")
                 if singlePromoPass==True:
-                    print ('Promo+1= %d' % (numPromo+1))
+                    #print ('Promo+1= %d' % (numPromo+1))
                     if columnNames[numPromo]==['p' + str(numPromo+1)]:
                         falseMatch=True
+                        singlePromoPass=False
                     print ('FalseMatch= %s columnName= %s' % (falseMatch, columnNames[numPromo]))    
-                print ('The file values: %s' % (columnNames[0:(numPromo)].tolist()))
-                print ('singlePromoPass: %s' % (singlePromoPass))
+        return singlePromoPass
                 
                 
-    def findMultiPromos(self,columnNames, arrayIndex):     
+    def findMultiPromos(self,columnNames, arrayIndex):
+        print columnNames
+        #fileMultiCol= columnNames[0:(numPromo)].tolist()    
         for element in arrayIndex:
+            print ('element in arrayindex: %s' % (str(element)))
             templist=list()
             elementLength=len(element)
-            print ('elementLength= %d' % (elementLength))
+            multiPromoList=list()
+            #print ('elementLength= %d' % (elementLength))
             if element !=[0,0]:
                 singlePromoList=[]
                 numPromo=element[1]
                 pCombinations=element[0]
                 numPromoList=range(numPromo+1)
-                print ('numPromo: %s numpromolist: %s' % (numPromo,numPromoList))
-            '''for i in range(1,numPromo+1):
-                for z in range(1,numPromo+1):
-                    pass
-            '''
-            for i in numPromoList:
-                if i > 0:
-                    templist.append(i)
-            print type(templist)
-            print templist
-            print list(itertools.combinations(templist, 2))
+                #print ('numPromo: %s numpromolist: %s' % (numPromo,numPromoList))
 
-            #for element1 in itertools.product(*templist):
-            #    print ('Element1: %s' %(element1))
+                for i in numPromoList:
+                    if i > 0:
+                        templist.append(i)
+
+                for z in range(2,pCombinations+1):
                     
-                   
+                    tempCol=list(itertools.combinations(templist, z))
+                    for ele in tempCol:
+                        tempColName='p'
+                        ele2First=True
+                        for ele2 in ele:
+                            if ele2First==True:
+                                tempColName=tempColName + str(ele2)
+                                ele2First=False
+                            else:
+                                tempColName=tempColName + '.' + str(ele2)
+                        print ('ele2=%s' % (str(tempColName)))
+                        multiPromoList.append(tempColName)
+                    multiPromoPass=(multiPromoList[0:len(multiPromoList)+1]==columnNames[numPromo:len(columnNames)+1].tolist())
+                    print ('multi promo %s' %(multiPromoList[0:len(multiPromoList)+1]))
+                    print columnNames[numPromo:len(columnNames)+1].tolist()
+                    '''try:
+                        multiPromoPass=(multiPromoList[0:(numPromo)]==columnNames[numPromo:len(columnNames)+1].tolist())
+                    except NameError:
+                        print ("Fail in multi promo comparison")
+                        multiPromoPass=False
+                    '''
+        print ('multiPromoPass: %s' % (multiPromoPass))
+        return multiPromoPass      
+                    
+        
 #TEST THE CLASS here
-testClass=DataPrep('C:\Users\\astokes\Desktop\Analytic Solutions\mldata_2012_to_2016.csv',None,'CSV')    
+testClass=DataPrep('C:\Users\\astokes\Desktop\Analytic Solutions\mldata_2012_to_2016v2.csv',None,'CSV')    
 
 '''
 for idx, val in enumerate(possibleValues):
@@ -191,4 +212,10 @@ for idx, val in enumerate(possibleValues):
     def SeasDecompFcst(self,seas,trend,baseline,fcstStart, fcstEnd, PromoInfoDataFrame):
         #build a forecast by piecing together the components of the seasonalDecomposition() method
         #PromoInfoDataFrame would be the promotion information that would be used to assign some type of lift
+        
+    def createBaseline()
+    def calcLift()
+    def calcHalo()
+    def calcCann()
+    
     '''
