@@ -3,7 +3,11 @@ Created on Jul 12, 2016
 
 @author: Adam
 '''
+<<<<<<< HEAD
 #test adam
+=======
+#test
+>>>>>>> refs/remotes/origin/master
 import numpy as np
 import pandas as pd
 from scipy.special import comb
