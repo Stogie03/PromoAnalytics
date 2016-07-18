@@ -3,7 +3,7 @@ Created on Jul 12, 2016
 
 @author: Adam
 '''
-#test 1
+#test adam
 import numpy as np
 import pandas as pd
 from scipy.special import comb
